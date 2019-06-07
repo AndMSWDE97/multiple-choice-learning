@@ -1,0 +1,4 @@
+{"questions" : [
+	{"question": "Is a the right answer?", "a": "no", "b": "yes", "c": "yes", "solution": "a"},
+	{"question": "Are you in a browser?", "a": "no", "b": "yes", "c": "maybe?", "d": "I don't know", "solution": "b"}
+	]}

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<head>
+	<meta charset="utf-8"/>
+	<link rel="stylesheet" href="styles.css" type="text/css">
+	<script src="jquery-3.4.1.min.js"></script>
+	<script>
+		var loaded, questions, currentQuestionObject, answered, keyboardSelection;
+		loaded = false;
+		questions = $.getJSON("questions.json", function(questions) {
+			loaded = true;
+			console.log(questions);
+			console.log(questions.questions);
+		})
+		answered = false;
+		document.onkeydown = handleKeyboardPress;
+		window.onload = init;
+		function init() {
+			while (!loaded) {
+			}
+			loadNextQuestion();
+			updateHtml();
+		}
+		function updateHtml() {
+			document.getElementById("question").innerHTML = currentQuestionObject.question;
+			document.getElementById("a").innerHTML = currentQuestionObject.a;
+			document.getElementById("a").removeAttribute("style")
+			document.getElementById("b").innerHTML = currentQuestionObject.b;
+			document.getElementById("b").removeAttribute("style")
+			document.getElementById("c").innerHTML = currentQuestionObject.c;
+			document.getElementById("c").removeAttribute("style")
+			document.getElementById("d").innerHTML = currentQuestionObject.d;
+			document.getElementById("d").removeAttribute("style")
+			$("#continue").hide();
+		}
+		function checkSolution(answer) {
+			answered = true;
+			if (answer == currentQuestionObject.solution) {
+				document.getElementById(answer).setAttribute("style","background-color: green");
+			} else {
+				document.getElementById(answer).setAttribute("style","background-color: red");
+				document.getElementById(currentQuestionObject.solution).setAttribute("style","background-color: green");
+			}
+		}
+		function handleButtonPress(ButtonId) {
+			if (answered || ButtonId == "continue") {
+				loadNextQuestion();
+				updateHtml();
+				answered = false;
+			} else {
+				checkSolution(ButtonId);
+				$("#continue").show();
+			}
+		}
+		function handleKeyboardPress(e) {
+			e = e || window.event
+			if (e.keyCode == 13) {
+				if (answered) {
+					handleButtonPress("continue")
+				} else {
+					if (keyboardSelection) {
+						handleButtonPress(keyboardSelection)
+						keyboardSelection = null
+					}
+				}
+			} else {
+				if (!answered) {
+					var convertedCode = e.keyCode + 48
+					var selectedButton = document.getElementById(keyboardSelection)
+					if (selectedButton) {
+						selectedButton.removeAttribute("style")
+					}
+					keyboardSelection = String.fromCharCode(convertedCode)
+					selectedButton = document.getElementById(keyboardSelection)
+					if (selectedButton) {
+						selectedButton.setAttribute("style", "background-color: lightblue")
+					}
+				}
+			}
+		}
+		function loadNextQuestion() {
+			currentQuestionObject = questions.responseJSON.questions[Math.floor(Math.random()*questions.responseJSON.questions.length)];
+		}
+	</script>
+</head>
+<body>
+	<dir>
+		<h2 id="question"></h2>
+		<p>
+			<button id="a" onmousedown=handleButtonPress("a")>1</button>
+		</p>
+		<p>
+			<button id="b" onmousedown=handleButtonPress("b")>2</button>
+		</p>
+		<p>
+			<button id="c" onmousedown=handleButtonPress("c")>3</button>
+		</p>
+		<p>
+			<button id="d" onmousedown=handleButtonPress("d")>4</button>
+		</p>
+		<p>
+			<button id="continue" onmousedown=handleButtonPress("continue")>continue</button>
+		</p>
+	</dir>
+</body>
