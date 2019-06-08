@@ -4,21 +4,23 @@
 	<link rel="stylesheet" href="styles.css" type="text/css">
 	<script src="jquery-3.4.1.min.js"></script>
 	<script>
-		var loaded, questions, currentQuestionObject, answered, keyboardSelection;
-		loaded = false;
-		questions = $.getJSON("./questions.json", function(questions) {
-			loaded = true;
-			console.log(questions);
-			console.log(questions.questions);
-			loadNextQuestion();
-			updateHtml();
-		})
-		answered = false;
-		document.onkeydown = handleKeyboardPress;
+		var questions, currentQuestionObject, answered, keyboardSelection, questionsLocation;
 		window.onload = init;
+		document.onkeydown = handleKeyboardPress;
 		function init() {
-			//while (!loaded) {
-			//}
+			answered = false;
+			var isChrome = navigator.userAgent.indexOf("Chrome") != -1
+			if (isChrome) {
+				questionsLocation = "http://127.0.0.1:8000/questions.json";
+			} else {
+				questionsLocation = "./questions.json";
+			}
+			questions = $.getJSON(questionsLocation, function(questions) {
+				console.log(questions);
+				console.log(questions.questions);
+				loadNextQuestion();
+				updateHtml();
+			})
 		}
 		function updateHtml() {
 			document.getElementById("question").innerHTML = currentQuestionObject.question;
