@@ -6,19 +6,19 @@
 	<script>
 		var loaded, questions, currentQuestionObject, answered, keyboardSelection;
 		loaded = false;
-		questions = $.getJSON("questions.json", function(questions) {
+		questions = $.getJSON("http://127.0.0.1:8000/questions.json", function(questions) {
 			loaded = true;
 			console.log(questions);
 			console.log(questions.questions);
+			loadNextQuestion();
+			updateHtml();
 		})
 		answered = false;
 		document.onkeydown = handleKeyboardPress;
 		window.onload = init;
 		function init() {
-			while (!loaded) {
-			}
-			loadNextQuestion();
-			updateHtml();
+			//while (!loaded) {
+			//}
 		}
 		function updateHtml() {
 			document.getElementById("question").innerHTML = currentQuestionObject.question;
