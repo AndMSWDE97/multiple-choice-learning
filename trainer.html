@@ -6,7 +6,7 @@
 	<script>
 		var loaded, questions, currentQuestionObject, answered, keyboardSelection;
 		loaded = false;
-		questions = $.getJSON("http://127.0.0.1:8000/questions.json", function(questions) {
+		questions = $.getJSON("./questions.json", function(questions) {
 			loaded = true;
 			console.log(questions);
 			console.log(questions.questions);
