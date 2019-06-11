@@ -8,6 +8,21 @@ dir {
     width:30%;
 }
 
+nav {
+    text-align: center;
+}
+
+nav ul li {
+    display: inline-block;
+    padding: 15px;
+    background-color: #f0f0f0;
+}
+
+nav ul li:hover{
+    background-color: dodgerblue;
+    cursor: pointer;
+}
+
 h2 {
     text-align: center
 }
@@ -20,5 +35,5 @@ button {
 }
 
 button:hover {
-    background: lightblue;
+    background: dodgerblue;
 }

@@ -4,7 +4,7 @@
 	<link rel="stylesheet" href="styles.css" type="text/css">
 	<script src="jquery-3.4.1.min.js"></script>
 	<script>
-		var questions, currentQuestionObject, answered, keyboardSelection, questionsLocation;
+		var questions, currentQuestionObject, answered, keyboardSelection, questionsLocation, questionPool;
 		window.onload = init;
 		document.onkeydown = handleKeyboardPress;
 		function init() {
@@ -18,8 +18,7 @@
 			questions = $.getJSON(questionsLocation, function(questions) {
 				console.log(questions);
 				console.log(questions.questions);
-				loadNextQuestion();
-				updateHtml();
+				changeChapter(0);
 			})
 		}
 		function updateHtml() {
@@ -74,13 +73,27 @@
 					keyboardSelection = String.fromCharCode(convertedCode)
 					selectedButton = document.getElementById(keyboardSelection)
 					if (selectedButton) {
-						selectedButton.setAttribute("style", "background-color: lightblue")
+						selectedButton.setAttribute("style", "background-color: dodgerblue")
 					}
 				}
 			}
 		}
 		function loadNextQuestion() {
-			currentQuestionObject = questions.responseJSON.questions[Math.floor(Math.random()*questions.responseJSON.questions.length)];
+			currentQuestionObject = questionPool[Math.floor(Math.random()*questionPool.length)];
+		}
+		function changeChapter(chapter) {
+			switch (chapter) {
+				case 0:
+					questionPool = questions.responseJSON.questions;
+					break;
+				case 1:
+					questionPool = questions.responseJSON.chapter1;
+					break;
+				case 2:
+					questionPool = questions.responseJSON.chapter2;
+			}
+			loadNextQuestion();
+			updateHtml();
 		}
 	</script>
 </head>
@@ -103,4 +116,11 @@
 			<button id="continue" onmousedown=handleButtonPress("continue")>continue</button>
 		</p>
 	</dir>
+	<nav>
+		<ul>
+			<li onclick="changeChapter(1)">chapter 1</li>
+			<li onclick="changeChapter(2)">chapter 2</li>
+			<li onclick="changeChapter(0)">mixed</li>
+		</ul>
+	</nav>
 </body>
